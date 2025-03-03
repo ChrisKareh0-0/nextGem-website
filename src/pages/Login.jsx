@@ -20,7 +20,7 @@ export default function Login() {
       if (credentials.username === 'admin' && credentials.password === 'Next@gem2025$') {
         localStorage.setItem('isAuthenticated', 'true');
         toast.success('Login successful');
-        navigate('/dashboard/home');
+        navigate('/dashboard');
       } else {
         throw new Error('Invalid credentials');
       }

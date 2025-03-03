@@ -243,7 +243,7 @@ export default function ManagementDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
-    navigate('/dashboard');
+    navigate('/login');
   };
 
   const handleQuotationOpen = (quotationUrl) => {

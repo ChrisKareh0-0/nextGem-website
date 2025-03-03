@@ -392,6 +392,13 @@ function App() {
               <Login />
             </Suspense>
           } />
+          <Route path="/dashboard" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ProtectedRoute>
+                <ManagementDashboard />
+              </ProtectedRoute>
+            </Suspense>
+          } />
           <Route path="/management" element={
             <Suspense fallback={<LoadingSpinner />}>
               <ProtectedRoute>
@@ -403,13 +410,6 @@ function App() {
             <Suspense fallback={<LoadingSpinner />}>
               <ProtectedRoute>
                 <CommunicationPage />
-              </ProtectedRoute>
-            </Suspense>
-          } />
-          <Route path="/dashboard" element={
-            <Suspense fallback={<LoadingSpinner />}>
-              <ProtectedRoute>
-                <ManagementDashboard />
               </ProtectedRoute>
             </Suspense>
           } />
