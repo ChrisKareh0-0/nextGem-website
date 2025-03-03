@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ContactForm from './Components/ContactForm';
 import Spline from '@splinetool/react-spline';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './Components/ProtectedRoute';
 
 // Lazy load the pages
 const ManagementPage = lazy(() => import('./pages/ManagementPage'));
