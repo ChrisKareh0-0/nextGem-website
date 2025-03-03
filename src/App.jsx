@@ -19,6 +19,7 @@ const ManagementPage = lazy(() => import('./pages/ManagementPage'));
 const CommunicationPage = lazy(() => import('./pages/CommunicationPage'));
 const ManagementDashboard = lazy(() => import('./pages/ManagementDashboard'));
 const Login = lazy(() => import('./pages/Login'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 const ResizableInput = ({ placeholder }) => {
   const [fontSize, setFontSize] = useState(14);
@@ -189,6 +190,32 @@ function App() {
         </header>
 
         <Routes>
+          <Route path="/login" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <Login />
+            </Suspense>
+          } />
+          <Route path="/dashboard" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ProtectedRoute>
+                <ManagementDashboard />
+              </ProtectedRoute>
+            </Suspense>
+          } />
+          <Route path="/management" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ProtectedRoute>
+                <ManagementPage />
+              </ProtectedRoute>
+            </Suspense>
+          } />
+          <Route path="/communication" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ProtectedRoute>
+                <CommunicationPage />
+              </ProtectedRoute>
+            </Suspense>
+          } />
           <Route path="/" element={
             <main className="l-main">
               {/* HOME SECTION */}
@@ -386,31 +413,9 @@ function App() {
               </div>
             </main>
           } />
-          
-          <Route path="/login" element={
+          <Route path="*" element={
             <Suspense fallback={<LoadingSpinner />}>
-              <Login />
-            </Suspense>
-          } />
-          <Route path="/dashboard" element={
-            <Suspense fallback={<LoadingSpinner />}>
-              <ProtectedRoute>
-                <ManagementDashboard />
-              </ProtectedRoute>
-            </Suspense>
-          } />
-          <Route path="/management" element={
-            <Suspense fallback={<LoadingSpinner />}>
-              <ProtectedRoute>
-                <ManagementPage />
-              </ProtectedRoute>
-            </Suspense>
-          } />
-          <Route path="/communication" element={
-            <Suspense fallback={<LoadingSpinner />}>
-              <ProtectedRoute>
-                <CommunicationPage />
-              </ProtectedRoute>
+              <NotFound />
             </Suspense>
           } />
         </Routes>
