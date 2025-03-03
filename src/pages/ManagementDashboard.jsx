@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import './ManagementDashboard.css';
 import { useNavigate } from 'react-router-dom';
-import EditClientModal from '../components/EditClientModal';
+import EditClientModal from '../Components/EditClientModal';
 
 export default function ManagementDashboard() {
   const [clients, setClients] = useState([]);
