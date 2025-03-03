@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import ScrollReveal from 'scrollreveal';
 import './App.css'; // <-- Import your CSS
 import StarBackground from './Components/StarBackground'; // Our new star background
@@ -12,13 +12,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import ContactForm from './Components/ContactForm';
 import Spline from '@splinetool/react-spline';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import ManagementPage from './pages/ManagementPage';
-import CommunicationPage from './pages/CommunicationPage';
-import ManagementDashboard from './pages/ManagementDashboard';
-import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 
-
+// Lazy load the pages
+const ManagementPage = lazy(() => import('./pages/ManagementPage'));
+const CommunicationPage = lazy(() => import('./pages/CommunicationPage'));
+const ManagementDashboard = lazy(() => import('./pages/ManagementDashboard'));
+const Login = lazy(() => import('./pages/Login'));
 
 const ResizableInput = ({ placeholder }) => {
   const [fontSize, setFontSize] = useState(14);
@@ -44,7 +44,6 @@ const ResizableInput = ({ placeholder }) => {
     />
   );
 };
-
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -101,6 +100,13 @@ function App() {
       contactSection.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  // Loading component for Suspense fallback
+  const LoadingSpinner = () => (
+    <div className="loading-spinner">
+      <div className="spinner"></div>
+    </div>
+  );
 
   return (
     <Router>
@@ -381,17 +387,32 @@ function App() {
             </main>
           } />
           
-          <Route path="/management" element={<ManagementPage />} />
-          <Route path="/communication" element={<CommunicationPage />} />
-          <Route path="/dashboard" element={<Login />} />
-          <Route 
-            path="/dashboard/home" 
-            element={
+          <Route path="/login" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <Login />
+            </Suspense>
+          } />
+          <Route path="/management" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ProtectedRoute>
+                <ManagementPage />
+              </ProtectedRoute>
+            </Suspense>
+          } />
+          <Route path="/communication" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ProtectedRoute>
+                <CommunicationPage />
+              </ProtectedRoute>
+            </Suspense>
+          } />
+          <Route path="/dashboard" element={
+            <Suspense fallback={<LoadingSpinner />}>
               <ProtectedRoute>
                 <ManagementDashboard />
               </ProtectedRoute>
-            } 
-          />
+            </Suspense>
+          } />
         </Routes>
 
         {/* FOOTER */}
