@@ -11,12 +11,15 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ContactForm from './Components/ContactForm';
 import Spline from '@splinetool/react-spline';
+<<<<<<< HEAD
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import ManagementPage from './pages/ManagementPage';
 import CommunicationPage from './pages/CommunicationPage';
 import ManagementDashboard from './pages/ManagementDashboard';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+=======
+>>>>>>> NextGem/master
 
 
 
@@ -103,6 +106,7 @@ function App() {
   };
 
   return (
+<<<<<<< HEAD
     <Router>
       <>
         <Spline 
@@ -425,6 +429,313 @@ function App() {
         />
       </>
     </Router>
+=======
+    <>
+      <Spline 
+        scene="https://prod.spline.design/Dc1yF0TKl-zWQE6X/scene.splinecode"
+        style={{ width: '100%', height: '100vh', position: 'fixed', top: 0, left: 0, zIndex: -1 }}
+      />
+      <div className="floating-rectangle"></div>
+      
+      {/* HEADER */}
+      <header className="l-header">
+        <nav className="nav bd-grid">
+          <div>
+            {/* Optionally, uncomment text logo */}
+            {/* <a href="#home" className="nav-logo">NextGem</a> */}
+            <img
+              src={LOGO1}
+              width={200}
+              height={100}
+              alt="NextGem Logo"
+            />
+          </div>
+
+          {/* Mobile/desktop nav menu */}
+          <div className={`nav-menu ${isMenuOpen ? 'show' : ''}`} id="nav-menu">
+            <ul className="nav-list">
+              <li className="nav-item">
+                <a
+                  href="#home"
+                  className={`nav-link ${activeLink === '#home' ? 'active' : ''}`}
+                  onClick={() => handleNavLinkClick('#home')}
+                >
+                  Home
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="#about"
+                  className={`nav-link ${activeLink === '#about' ? 'active' : ''}`}
+                  onClick={() => handleNavLinkClick('#about')}
+                >
+                  About
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="#Services"
+                  className={`nav-link ${activeLink === '#Services' ? 'active' : ''}`}
+                  onClick={() => handleNavLinkClick('#Services')}
+                >
+                  Services
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="#work"
+                  className={`nav-link ${activeLink === '#work' ? 'active' : ''}`}
+                  onClick={() => handleNavLinkClick('#work')}
+                >
+                  Clients
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="#contact"
+                  className={`nav-link ${activeLink === '#contact' ? 'active' : ''}`}
+                  onClick={() => handleNavLinkClick('#contact')}
+                >
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
+          {/* Optionally include mobile nav toggle */}
+          {/* <div className="nav-toggle" id="nav-toggle" onClick={handleToggleMenu}>
+            <i className="bx bx-menu"></i>
+          </div> */}
+        </nav>
+      </header>
+
+      {/* MAIN CONTENT */}
+      <main className="l-main">
+        {/* HOME SECTION */}
+        <section className="home bd-grid" id="home">
+          <div className="home-data">
+            <h1 className="home-title">
+              This is <br />
+              <span className="home-title-color">NextGem</span>
+              <br />
+            </h1>
+            {/* Contact button scrolls to the contact section */}
+            <button className="contactButton" onClick={scrollToContact}>
+              Contact
+              <div className="star-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlSpace="preserve"
+                  version="1.1"
+                  style={svgStyle}
+                  viewBox="0 0 784.11 815.53"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <defs></defs>
+                  <g id="Layer_x0020_1">
+                    <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                    <path className="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" />
+                  </g>
+                </svg>
+              </div>
+              <div className="star-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlSpace="preserve"
+                  version="1.1"
+                  style={svgStyle}
+                  viewBox="0 0 784.11 815.53"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <defs></defs>
+                  <g id="Layer_x0020_1">
+                    <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                    <path className="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" />
+                  </g>
+                </svg>
+              </div>
+              <div className="star-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlSpace="preserve"
+                  version="1.1"
+                  style={svgStyle}
+                  viewBox="0 0 784.11 815.53"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <defs></defs>
+                  <g id="Layer_x0020_1">
+                    <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                    <path className="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" />
+                  </g>
+                </svg>
+              </div>
+              <div className="star-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlSpace="preserve"
+                  version="1.1"
+                  style={svgStyle}
+                  viewBox="0 0 784.11 815.53"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <defs></defs>
+                  <g id="Layer_x0020_1">
+                    <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                    <path className="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" />
+                  </g>
+                </svg>
+              </div>
+              <div className="star-5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlSpace="preserve"
+                  version="1.1"
+                  style={svgStyle}
+                  viewBox="0 0 784.11 815.53"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <defs></defs>
+                  <g id="Layer_x0020_1">
+                    <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                    <path className="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" />
+                  </g>
+                </svg>
+              </div>
+              <div className="star-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlSpace="preserve"
+                  version="1.1"
+                  style={svgStyle}
+                  viewBox="0 0 784.11 815.53"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <defs></defs>
+                  <g id="Layer_x0020_1">
+                    <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                    <path className="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" />
+                  </g>
+                </svg>
+              </div>
+            </button>
+          </div>
+
+          {/* All social icons in one container */}
+          <div className="home-social">
+            <a href="https://www.tiktok.com/@nextgemagency_?_t=ZS-8tr0VGTNNmp&_r=1" className="home-social-icon">
+              <i className="bx bxl-tiktok"></i>
+            </a>
+            <a href="https://www.instagram.com/nextgemagency?igsh=bjExOG1qd215MXpi&utm_source=qr" className="home-social-icon">
+              <i className="bx bxl-instagram"></i>
+            </a>
+            <a href="https://www.facebook.com/share/18LhroPBFo/?mibextid=wwXIfr" className="home-social-icon">
+              <i className="bx bxl-facebook"></i>
+            </a>
+            <a href="https://www.linkedin.com/company/nextgem-agency/" className="home-social-icon">
+              <i className="bx bxl-linkedin"></i>
+            </a>
+          </div>
+
+          <div className="home-img">
+            <img
+              src={LOGO2}
+              alt="NextGem Profile"
+              width={500}
+              height={500}
+            />
+          </div>
+        </section>
+
+        {/* ABOUT SECTION */}
+        <section className="about section" id="about">
+          <h2 className="section-title">About</h2>
+          <div className="about-container bd-grid">
+            <div className="about-img">
+              <img
+                src={AboutLogo}
+                alt="About"
+              />
+            </div>
+            <div>
+              <h2 className="about-subtitle">
+                At NextGem, we specialize in branding, social media marketing, content creation, and digital strategies for all businesses. With expertise in brand positioning and digital storytelling, we help businesses build credibility, generate leads, and convert online engagement into real sales.
+              </h2>
+            </div>
+          </div>
+        </section>
+
+        {/* Services */}
+        <h2 className="section-title"> Services</h2>
+        <HomeServicesSection/>
+
+        {/* Client */}
+        <h2 className="section-title"> Clients</h2>
+        <ClientsCarousel />
+
+        {/* CONTACT SECTION */}
+        <div id="contact" className="background">
+          <div className="container">
+            <div className="screen">
+              <div className="screen-header">
+                <div className="screen-header-left">
+                  <div className="screen-header-button close"></div>
+                  <div className="screen-header-button maximize"></div>
+                  <div className="screen-header-button minimize"></div>
+                </div>
+                <div className="screen-header-right">
+                  <div className="screen-header-ellipsis"></div>
+                  <div className="screen-header-ellipsis"></div>
+                  <div className="screen-header-ellipsis"></div>
+                </div>
+              </div>
+              <div className="screen-body">
+                <div className="screen-body-item left">
+                  <div className="app-title">
+                    <span>CONTACT US</span>
+                    <span></span>
+                  </div>
+                  <div className="app-contact">CONTACT INFO : creative@nextgem.agency</div>
+                </div>
+                <div className="screen-body-item">
+                  <ContactForm />
+                </div>
+              </div>
+            </div>          
+          </div>
+        </div>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="footer">
+        <p className="footer-title">NextGem</p>
+        <div className="footer-social">
+          <a href="#!" className="footer-icon">
+            <i className="bx bxl-facebook"></i>
+          </a>
+          <a href="#!" className="footer-icon">
+            <i className="bx bxl-instagram"></i>
+          </a>
+          <a href="#!" className="footer-icon">
+            <i className="bx bxl-twitter"></i>
+          </a>
+        </div>
+        <p>&#169; 2025 Copyright all rights reserved</p>
+      </footer>
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+    </>
+>>>>>>> NextGem/master
   );
 }
 
