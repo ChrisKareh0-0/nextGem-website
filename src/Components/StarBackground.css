@@ -1,0 +1,444 @@
+/* Basic page background */
+html {
+  height: auto;
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+}
+
+
+
+/* ===================== STAR LAYER 1 ===================== */
+#stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: 
+    1324px 1932px #f35a2f,
+    1854px 1291px #f35a2f,
+    1386px 1593px #f35a2f,
+    1183px 1607px #f35a2f,
+    1731px 667px  #f35a2f,
+    622px 1963px  #f35a2f,
+    1138px 1428px #f35a2f,
+    1972px 689px  #f35a2f,
+    1560px 396px  #f35a2f,
+    1423px 1132px #f35a2f,
+    800px 1500px  #f35a2f,
+    1200px 800px  #f35a2f,
+    500px 1300px  #f35a2f,
+    1600px 1000px #f35a2f,
+    1100px 1800px #f35a2f,
+    900px 400px   #f35a2f,
+    1300px 500px  #f35a2f,
+    1400px 1700px #f35a2f,
+    1000px 2000px #f35a2f,
+    1500px 600px  #f35a2f,
+    1700px 1200px #f35a2f,
+    800px 600px   #f35a2f,
+    200px 900px   #f35a2f,
+    600px 300px   #f35a2f,
+    1800px 1400px #f35a2f,
+    900px 1800px  #f35a2f,
+    700px 1000px  #f35a2f,
+    1600px 1500px #f35a2f,
+    1300px 1300px #f35a2f,
+    1100px 1100px #f35a2f;
+  animation: animStar 50s linear infinite;
+  z-index: -1;
+}
+
+#stars::after {
+  content: "";
+  position: absolute;
+  top: 2000px;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: 
+    1324px 1932px #f35a2f,
+    1854px 1291px #f35a2f,
+    1386px 1593px #f35a2f,
+    1183px 1607px #f35a2f,
+    1731px 667px  #f35a2f,
+    622px 1963px  #f35a2f,
+    1138px 1428px #f35a2f,
+    1972px 689px  #f35a2f,
+    1560px 396px  #f35a2f,
+    1423px 1132px #f35a2f,
+    800px 1500px  #f35a2f,
+    1200px 800px  #f35a2f,
+    500px 1300px  #f35a2f,
+    1600px 1000px #f35a2f,
+    1100px 1800px #f35a2f,
+    900px 400px   #f35a2f,
+    1300px 500px  #f35a2f,
+    1400px 1700px #f35a2f,
+    1000px 2000px #f35a2f,
+    1500px 600px  #f35a2f,
+    1700px 1200px #f35a2f,
+    800px 600px   #f35a2f,
+    200px 900px   #f35a2f,
+    600px 300px   #f35a2f,
+    1800px 1400px #f35a2f,
+    900px 1800px  #f35a2f,
+    700px 1000px  #f35a2f,
+    1600px 1500px #f35a2f,
+    1300px 1300px #f35a2f,
+    1100px 1100px #f35a2f;
+}
+
+/* ===================== STAR LAYER 2 ===================== */
+/* (Existing code remains unchanged) */
+#stars2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow:
+    133px 1333px #f35a2f,
+    1124px 187px  #f35a2f,
+    1933px 1664px #f35a2f,
+    553px 708px   #f35a2f,
+    1652px 200px  #f35a2f,
+    900px 1200px  #f35a2f,
+    750px 800px   #f35a2f,
+    1400px 500px  #f35a2f,
+    500px 1000px  #f35a2f,
+    1200px 900px  #f35a2f,
+    800px 400px   #f35a2f,
+    133px 1333px #f35a2f,
+    1124px 187px  #f35a2f,
+    1933px 1664px #f35a2f,
+    553px 708px   #f35a2f,
+    1652px 200px  #f35a2f,
+    900px 1200px  #f35a2f,
+    750px 800px   #f35a2f,
+    1400px 500px  #f35a2f,
+    500px 1000px  #f35a2f,
+    1200px 900px  #f35a2f,
+    800px 400px   #f35a2f;
+  animation: animStar 100s linear infinite;
+  z-index: -1;
+}
+
+#stars2::after {
+  content: "";
+  position: absolute;
+  top: 2000px;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow:
+    133px 1333px #f35a2f,
+    1124px 187px  #f35a2f,
+    1933px 1664px #f35a2f,
+    553px 708px   #f35a2f,
+    1652px 200px  #f35a2f,
+    900px 1200px  #f35a2f,
+    750px 800px   #f35a2f,
+    1400px 500px  #f35a2f,
+    500px 1000px  #f35a2f,
+    1200px 900px  #f35a2f,
+    800px 400px   #f35a2f,
+    133px 1333px #f35a2f,
+    1124px 187px  #f35a2f,
+    1933px 1664px #f35a2f,
+    553px 708px   #f35a2f,
+    1652px 200px  #f35a2f,
+    900px 1200px  #f35a2f,
+    750px 800px   #f35a2f,
+    1400px 500px  #f35a2f,
+    500px 1000px  #f35a2f,
+    1200px 900px  #f35a2f,
+    800px 400px   #f35a2f;
+}
+
+/* ===================== STAR LAYER 3 ===================== */
+/* (Existing code remains unchanged) */
+#stars3 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 3px;
+  height: 3px;
+  background: transparent;
+  box-shadow:
+    1432px 1555px #f35a2f,
+    428px 1896px  #f35a2f,
+    1928px 1439px #f35a2f,
+    800px 1100px  #f35a2f,
+    1600px 900px   #f35a2f,
+    700px 500px    #f35a2f,
+    500px 1600px   #f35a2f,
+    1000px 700px   #f35a2f,
+    1300px 1400px  #f35a2f,
+    1432px 1555px #f35a2f,
+    428px 1896px  #f35a2f,
+    1928px 1439px #f35a2f,
+    800px 1100px  #f35a2f,
+    1600px 900px   #f35a2f,
+    700px 500px    #f35a2f,
+    500px 1600px   #f35a2f,
+    1000px 700px   #f35a2f,
+    1300px 1400px  #f35a2f;
+  animation: animStar 150s linear infinite;
+  z-index: -1;
+}
+
+#stars3::after {
+  content: "";
+  position: absolute;
+  top: 2000px;
+  width: 3px;
+  height: 3px;
+  background: transparent;
+  box-shadow:
+    1432px 1555px #f35a2f,
+    428px 1896px  #f35a2f,
+    1928px 1439px #f35a2f,
+    800px 1100px  #f35a2f,
+    1600px 900px   #f35a2f,
+    700px 500px    #f35a2f,
+    500px 1600px   #f35a2f,
+    1000px 700px   #f35a2f,
+    1300px 1400px  #f35a2f,
+    1432px 1555px #f35a2f,
+    428px 1896px  #f35a2f,
+    1928px 1439px #f35a2f,
+    800px 1100px  #f35a2f,
+    1600px 900px   #f35a2f,
+    700px 500px    #f35a2f,
+    500px 1600px   #f35a2f,
+    1000px 700px   #f35a2f,
+    1300px 1400px  #f35a2f;
+}
+
+/* ===================== STAR LAYER 4 ===================== */
+#stars4 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 4px;
+  height: 4px;
+  background: transparent;
+  box-shadow:
+    500px 500px #f35a2f,
+    800px 1200px #f35a2f,
+    1300px 900px #f35a2f,
+    400px 700px #f35a2f,
+    1100px 1600px #f35a2f,
+    700px 800px #f35a2f,
+    900px 500px #f35a2f,
+    1200px 1500px #f35a2f,
+    1400px 700px #f35a2f,
+    600px 1100px #f35a2f,
+    500px 500px #f35a2f,
+    800px 800px #f35a2f;
+  animation: animStar 200s linear infinite;
+  z-index: -1;
+}
+
+#stars4::after {
+  content: "";
+  position: absolute;
+  top: 2000px;
+  width: 4px;
+  height: 4px;
+  background: transparent;
+  box-shadow:
+    500px 500px #f35a2f,
+    800px 1200px #f35a2f,
+    1300px 900px #f35a2f,
+    400px 700px #f35a2f,
+    1100px 1600px #f35a2f,
+    700px 800px #f35a2f,
+    900px 500px #f35a2f,
+    1200px 1500px #f35a2f,
+    1400px 700px #f35a2f,
+    600px 1100px #f35a2f,
+    500px 500px #f35a2f,
+    800px 800px #f35a2f;
+}
+
+/* ===================== STAR LAYER 5 ===================== */
+#stars5 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 5px;
+  height: 5px;
+  background: transparent;
+  box-shadow:
+    600px 800px #f35a2f,
+    1000px 1200px #f35a2f,
+    800px 600px #f35a2f,
+    400px 500px #f35a2f,
+    1200px 1000px #f35a2f,
+    1500px 1400px #f35a2f,
+    900px 700px #f35a2f,
+    1300px 800px #f35a2f,
+    700px 900px #f35a2f,
+    1100px 600px #f35a2f,
+    600px 800px #f35a2f,
+    1000px 1200px #f35a2f,
+    800px 600px #f35a2f,
+    400px 500px #f35a2f,
+    1200px 1000px #f35a2f,
+    1500px 1400px #f35a2f,
+    900px 700px #f35a2f,
+    1300px 800px #f35a2f,
+    700px 900px #f35a2f,
+    1100px 600px #f35a2f;
+  animation: animStar 250s linear infinite;
+  z-index: -1;
+}
+
+#stars5::after {
+  content: "";
+  position: absolute;
+  top: 2000px;
+  width: 5px;
+  height: 5px;
+  background: transparent;
+  box-shadow:
+    600px 800px #f35a2f,
+    1000px 1200px #f35a2f,
+    800px 600px #f35a2f,
+    400px 500px #f35a2f,
+    1200px 1000px #f35a2f,
+    1500px 1400px #f35a2f,
+    900px 700px #f35a2f,
+    1300px 800px #f35a2f,
+    700px 900px #f35a2f,
+    1100px 600px #f35a2f,
+    600px 800px #f35a2f,
+    1000px 1200px #f35a2f,
+    800px 600px #f35a2f,
+    400px 500px #f35a2f,
+    1200px 1000px #f35a2f,
+    1500px 1400px #f35a2f,
+    900px 700px #f35a2f,
+    1300px 800px #f35a2f,
+    700px 900px #f35a2f,
+    1100px 600px #f35a2f;
+}
+
+/* ===================== NEW: STAR LAYER LEFT ===================== */
+/* This layer positions stars along the left side of the viewport */
+#starsLeft {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  /* Use small x-values so stars appear near the left edge */
+  box-shadow:
+    40px 100px #f35a2f,
+    45px 300px #f35a2f,
+    50px 500px #f35a2f,
+    55px 700px  #f35a2f,
+    60px 900px #f35a2f,
+    65px 1100px #f35a2f,
+    70px 1300px #f35a2f,
+    75px 1500px #f35a2f;
+  animation: animStar 60s linear infinite;
+  z-index: -1;
+}
+
+#starsLeft::after {
+  content: "";
+  position: absolute;
+  top: 2000px;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow:
+    10px 100px #f35a2f,
+    15px 300px #f35a2f,
+    20px 500px #f35a2f,
+    5px 700px  #f35a2f,
+    25px 900px #f35a2f,
+    8px 1100px #f35a2f,
+    12px 1300px #f35a2f,
+    18px 1500px #f35a2f;
+}
+
+/* ===================== TITLE ===================== */
+#title {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  right: 0;
+  margin-top: -60px;
+  color: #f35a2f;
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  font-size: 50px;
+  letter-spacing: 10px;
+  padding-left: 10px;
+  z-index: -1;
+}
+
+#title span {
+  background: -webkit-linear-gradient(white, #38495a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===================== STAR ANIMATION ===================== */
+@keyframes animStar {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-2000px);
+  }
+}
+
+@media screen and (max-width: 1568px){
+  .container {
+    border-color : red;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #stars, #stars2, #stars3, #stars4, #stars5, #starsLeft {
+    box-shadow: 
+      100px 300px #f35a2f,
+      200px 500px #f35a2f,
+      300px 700px #f35a2f,
+      400px 900px #f35a2f,
+      500px 1100px #f35a2f,
+      600px 1300px #f35a2f,
+      700px 1500px #f35a2f,
+      800px 1700px #f35a2f,
+      900px 1900px #f35a2f,
+      100px 200px #f35a2f,
+      200px 400px #f35a2f,
+      300px 600px #f35a2f,
+      400px 800px #f35a2f,
+      500px 1000px #f35a2f,
+      600px 1200px #f35a2f;
+  }
+
+  /* Reduce animation speed on mobile */
+  @keyframes animStar {
+    from {
+      transform: translateY(0px);
+    }
+    to {
+      transform: translateY(-1500px);
+    }
+  }
+}

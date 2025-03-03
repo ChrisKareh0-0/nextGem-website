@@ -1,0 +1,27 @@
+/* Import slick-carousel default styles */
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+.clients-carousel {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.clients-carousel h2 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #333;
+}
+
+.client-logo {
+  padding: 10px;
+}
+
+.client-logo img {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}

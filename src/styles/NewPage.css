@@ -1,0 +1,11 @@
+.new-page {
+  min-height: 100vh;
+  padding: 6rem 2rem 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+}
+
+.new-page h1 {
+  color: var(--first-color);
+  margin-bottom: 2rem;
+} 
