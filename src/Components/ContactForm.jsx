@@ -1,5 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
+
+// Helper to determine if we're in development mode
+const isDevelopment = import.meta.env.MODE === 'development';
+
+// Set the base URL for the API based on the environment
+const BACKEND_URL = isDevelopment 
+  ? 'http://localhost:5000' // Development: Use localhost
+  : 'https://nextgem-website-backend.onrender.com'; // Production: Use the deployed backend URL
+
+// Construct the full API URL for contacts
+const API_URL = `${BACKEND_URL}/api/contacts`;
+
+console.log('Contact Form API URL:', API_URL);
 
 const ResizableInput = ({ placeholder, value, onChange }) => {
   const [fontSize, setFontSize] = useState(window.innerWidth <= 768 ? 16 : 14);
@@ -43,8 +56,6 @@ const ResizableInput = ({ placeholder, value, onChange }) => {
     />
   );
 };
-
-const API_URL = 'https://nextgem-website-backend-thrn.onrender.com/api/contacts';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({

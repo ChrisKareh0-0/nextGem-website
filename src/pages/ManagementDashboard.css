@@ -232,17 +232,22 @@
 }
 
 .overdue-days {
-  color: #dc3545;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #ff4d4f;
+  margin: 5px 0;
+}
+
+.next-payment {
+  font-size: 0.9rem;
+  color: #1890ff;
+  margin: 5px 0;
 }
 
 .overdue-contact {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin-top: 5px;
 }
 
 .no-overdue {
@@ -260,4 +265,53 @@
     width: 100%;
     position: static;
   }
+}
+
+.date-inputs {
+  display: flex;
+  gap: 1rem;
+}
+
+.date-input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.date-input-group label {
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.date-input-group select,
+.date-input-group input[type="number"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.date-input-group input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.date-input-group input[type="number"]::-webkit-outer-spin-button,
+.date-input-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.debug-btn {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-right: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.debug-btn:hover {
+  background-color: #777;
 } 

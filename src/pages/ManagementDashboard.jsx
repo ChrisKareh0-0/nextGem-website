@@ -19,26 +19,73 @@ export default function ManagementDashboard() {
     quotationFile: null,
     paymentHistory: []
   });
+  const [paymentDueMonthDay, setPaymentDueMonthDay] = useState({ month: '', day: '' });
   const [selectedQuotation, setSelectedQuotation] = useState(null);
   const [notificationPermission, setNotificationPermission] = useState(false);
   const navigate = useNavigate();
   const isDevelopment = import.meta.env.MODE === 'development';
-  const API_BASE_URL = isDevelopment 
-    ? 'http://localhost:5000'
-    : (import.meta.env.VITE_RENDER_API_URL || 'https://nextgem-backend.onrender.com');
+  // Set this to false to use the API instead of mock data
+  const USE_MOCK_DATA = true; // Temporarily use mock data until backend is running
+  
+  // Set the base URL for the API based on the environment
+  const FIREBASE_EMULATOR_URL = 'http://localhost:5001/nextgem-website-backend/us-central1/api';
+  const FIREBASE_PRODUCTION_URL = 'https://us-central1-nextgem-website-backend.cloudfunctions.net/api';
+  
+  const BACKEND_URL = isDevelopment 
+    ? FIREBASE_EMULATOR_URL
+    : FIREBASE_PRODUCTION_URL;
+    
+  // Helper function to get the correct API URL for each environment
+  const getApiUrl = (endpoint) => {
+    // Remove any leading slash
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
+    
+    // For Firebase Functions, we need to concatenate the API path
+    // The api prefix is already in the BACKEND_URL so we don't need to include it again
+    // For endpoints like 'api/clients', we need to just use 'clients'
+    const apiPath = cleanEndpoint.startsWith('api/') ? cleanEndpoint.substring(4) : cleanEndpoint;
+    
+    return `${BACKEND_URL}/${apiPath}`;
+  };
 
   // Debug log to check the URL and environment
   console.log('Environment:', import.meta.env.MODE);
-  console.log('API URL:', API_BASE_URL);
+  console.log('Backend URL:', BACKEND_URL);
+  console.log('Sample API endpoint:', getApiUrl('api/clients'));
+  console.log('Using mock data:', USE_MOCK_DATA);
+
+  // Load mock data from localStorage if available
+  useEffect(() => {
+    if (USE_MOCK_DATA) {
+      const savedClients = localStorage.getItem('mockClients');
+      if (savedClients) {
+        try {
+          const parsedClients = JSON.parse(savedClients);
+          console.log('Loaded mock clients from localStorage:', parsedClients);
+          setClients(parsedClients);
+        } catch (error) {
+          console.error('Error parsing saved clients:', error);
+        }
+      }
+    }
+  }, [USE_MOCK_DATA]);
+
+  // Save mock data to localStorage when it changes
+  useEffect(() => {
+    if (USE_MOCK_DATA && clients.length > 0) {
+      console.log('Saving clients to localStorage:', clients);
+      localStorage.setItem('mockClients', JSON.stringify(clients));
+    }
+  }, [clients, USE_MOCK_DATA]);
 
   // Fetch clients on component mount
   useEffect(() => {
-    if (!API_BASE_URL) {
-      console.error('API_BASE_URL is not defined');
-      toast.error('Configuration error: API URL not found');
-      return;
+    // Only fetch from API if we're not using mock data
+    if (!USE_MOCK_DATA) {
+      fetchClients();
     }
-    fetchClients();
+    
+    // Always check payment dues
     checkPaymentDues();
   }, []);
 
@@ -46,10 +93,33 @@ export default function ManagementDashboard() {
   useEffect(() => {
     const requestNotificationPermission = async () => {
       try {
-        const permission = await Notification.requestPermission();
-        setNotificationPermission(permission === 'granted');
+        // Check if the browser supports notifications
+        if (!("Notification" in window)) {
+          console.log("This browser does not support notifications");
+          return;
+        }
+        
+        // Check if we already have permission
+        if (Notification.permission === "granted") {
+          setNotificationPermission(true);
+          return;
+        }
+        
+        // Request permission
+        if (Notification.permission !== "denied") {
+          const permission = await Notification.requestPermission();
+          setNotificationPermission(permission === "granted");
+          
+          if (permission === "granted") {
+            // Send a test notification
+            new Notification("Notifications Enabled", {
+              body: "You will now receive payment due notifications",
+              icon: "/favicon.ico"
+            });
+          }
+        }
       } catch (error) {
-        console.error('Error requesting notification permission:', error);
+        console.error("Error requesting notification permission:", error);
       }
     };
 
@@ -57,31 +127,103 @@ export default function ManagementDashboard() {
   }, []);
 
   const fetchClients = async () => {
-    try {
-      console.log('Fetching from:', `${API_BASE_URL}/api/clients`);
-      const response = await fetch(`${API_BASE_URL}/api/clients`, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+    // If we were previously using mock data, the flag has been changed
+    if (USE_MOCK_DATA) {
+      console.log('Using mock data instead of fetching from API');
+      const mockData = [
+        {
+          id: '1',
+          contactName: 'John Doe',
+          phoneNumber: '123-456-7890',
+          location: 'New York',
+          email: 'john@example.com',
+          subscriptionDate: new Date('2023-01-01').toISOString(),
+          paymentDueDate: new Date('2023-06-15').toISOString(),
+          quotationFile: null,
+          paymentHistory: []
+        },
+        {
+          id: '2',
+          contactName: 'Jane Smith',
+          phoneNumber: '987-654-3210',
+          location: 'Los Angeles',
+          email: 'jane@example.com',
+          subscriptionDate: new Date('2023-02-15').toISOString(),
+          paymentDueDate: new Date('2023-07-10').toISOString(),
+          quotationFile: null,
+          paymentHistory: []
         }
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const text = await response.text();
-      console.log('Raw response:', text); // Debug log
+      ];
       
-      try {
-        const data = JSON.parse(text);
-        setClients(data);
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        console.log('Response that failed to parse:', text);
-        toast.error('Invalid data received from server');
+      setClients(mockData);
+      return;
+    }
+
+    console.log('Fetching clients from API');
+    console.log('API endpoint:', getApiUrl('api/clients'));
+    
+    try {
+      const response = await fetch(getApiUrl('api/clients'));
+      
+      if (!response.ok) {
+        // Log more details about the error
+        const statusText = response.statusText;
+        console.error('Response status:', response.status, statusText);
+        
+        try {
+          const errorText = await response.text();
+          console.log('Raw error response:', errorText);
+          
+          let errorData;
+          try {
+            errorData = JSON.parse(errorText);
+          } catch {
+            errorData = { error: `Server error (${response.status}): ${statusText || 'Unknown error'}` };
+          }
+          throw new Error(errorData.error || 'Failed to fetch clients');
+        } catch (e) {
+          throw new Error(`Error parsing response: ${e.message}`);
+        }
       }
+      
+      const data = await response.json();
+      console.log('Clients fetched successfully:', data);
+      setClients(data);
+      updateOverdueClients();
+      
     } catch (error) {
       console.error('Error fetching clients:', error);
-      toast.error(error.message || 'Failed to load clients');
+      toast.error('Failed to fetch clients: ' + error.message);
+      
+      // Fallback to mock data in case of API failure
+      // This ensures the application remains functional
+      toast.warning('Using mock data as fallback due to API error');
+      const mockData = [
+        {
+          id: '1',
+          contactName: 'John Doe',
+          phoneNumber: '123-456-7890',
+          location: 'New York',
+          email: 'john@example.com',
+          subscriptionDate: new Date('2023-01-01').toISOString(),
+          paymentDueDate: new Date('2023-06-15').toISOString(),
+          quotationFile: null,
+          paymentHistory: []
+        },
+        {
+          id: '2',
+          contactName: 'Jane Smith',
+          phoneNumber: '987-654-3210',
+          location: 'Los Angeles',
+          email: 'jane@example.com',
+          subscriptionDate: new Date('2023-02-15').toISOString(),
+          paymentDueDate: new Date('2023-07-10').toISOString(),
+          quotationFile: null,
+          paymentHistory: []
+        }
+      ];
+      
+      setClients(mockData);
     }
   };
 
@@ -95,51 +237,70 @@ export default function ManagementDashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const formData = new FormData();
-    const formattedClient = {
-      ...newClient,
-      subscriptionDate: new Date(newClient.subscriptionDate).toISOString(),
-      paymentDueDate: new Date(newClient.paymentDueDate).toISOString()
-    };
-
-    console.log('Submitting client data:', formattedClient);
-
-    Object.keys(formattedClient).forEach(key => {
-      if (formattedClient[key] !== null && key !== 'paymentHistory') {
-        formData.append(key, formattedClient[key]);
-      }
-    });
-
-    // Debug: Log FormData contents
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
-    }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/clients`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json'
-        },
-        body: formData
+    // Validate form fields
+    if (!newClient.contactName || !newClient.phoneNumber || 
+        !newClient.location || 
+        !newClient.subscriptionDate || 
+        !paymentDueMonthDay.month || !paymentDueMonthDay.day) {
+      
+      toast.error('Please fill in all required fields');
+      console.log('Form validation failed:', {
+        client: newClient,
+        paymentDueMonthDay
       });
-
-      let errorData;
-      if (!response.ok) {
-        try {
-          errorData = await response.json();
-          console.log('Error response:', errorData);
-        } catch (e) {
-          errorData = { error: 'Failed to parse error response' };
-        }
-        console.error('Server error response:', errorData);
-        throw new Error(errorData.error || 'Failed to add client');
-      }
-
-      const data = await response.json();
-      toast.success('Client added successfully');
+      return;
+    }
+    
+    // Create a full date for the payment due date using the current year
+    const currentYear = new Date().getFullYear();
+    const paymentDueDate = new Date(
+      currentYear, 
+      parseInt(paymentDueMonthDay.month) - 1, 
+      parseInt(paymentDueMonthDay.day)
+    );
+    
+    // Check if date is valid
+    if (isNaN(paymentDueDate.getTime())) {
+      toast.error('Invalid payment due date');
+      console.error('Invalid payment due date:', paymentDueMonthDay);
+      return;
+    }
+    
+    // Create an object with the client data
+    const clientData = {
+      contactName: newClient.contactName,
+      phoneNumber: newClient.phoneNumber,
+      location: newClient.location,
+      email: newClient.email || '',
+      subscriptionDate: newClient.subscriptionDate,
+      paymentDueDate: paymentDueDate.toISOString()
+    };
+    
+    // Use mock data if the flag is set
+    if (USE_MOCK_DATA) {
+      console.log('Using mock data instead of API');
+      
+      // Create a new client with the data
+      const newMockClient = {
+        id: Date.now().toString(),
+        ...clientData,
+        quotationFile: newClient.quotationFile,
+        paymentHistory: []
+      };
+      
+      console.log('Adding new mock client:', newMockClient);
+      
+      // Update the clients state with the new client
+      setClients(prevClients => {
+        const updatedClients = [...prevClients, newMockClient];
+        console.log('Updated clients list:', updatedClients);
+        return updatedClients;
+      });
+      
+      toast.success('Client added successfully (mock)');
       setShowAddForm(false);
-      fetchClients();
+      
+      // Reset form
       setNewClient({
         contactName: '',
         phoneNumber: '',
@@ -150,6 +311,71 @@ export default function ManagementDashboard() {
         quotationFile: null,
         paymentHistory: []
       });
+      setPaymentDueMonthDay({ month: '', day: '' });
+      
+      // Force an update of the overdue clients list
+      setTimeout(() => {
+        updateOverdueClients();
+        checkPaymentDues();
+      }, 100);
+      
+      return;
+    }
+
+    try {
+      console.log('Sending client data to API:', clientData);
+      console.log('API endpoint:', getApiUrl('api/clients'));
+      
+      const response = await fetch(getApiUrl('api/clients'), {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(clientData)
+      });
+
+      let errorData;
+      if (!response.ok) {
+        // Log more details about the error
+        const statusText = response.statusText;
+        console.error('Response status:', response.status, statusText);
+        
+        try {
+          const errorText = await response.text();
+          console.log('Raw error response:', errorText);
+          
+          try {
+            errorData = JSON.parse(errorText);
+          } catch {
+            errorData = { error: `Server error (${response.status}): ${statusText || 'Unknown error'}` };
+          }
+          throw new Error(errorData.error || 'Failed to add client');
+        } catch (e) {
+          throw new Error(`Error parsing response: ${e.message}`);
+        }
+      }
+
+      const result = await response.json();
+      console.log('API response:', result);
+      
+      toast.success('Client added successfully');
+      setShowAddForm(false);
+      // Reset form
+      setNewClient({
+        contactName: '',
+        phoneNumber: '',
+        location: '',
+        email: '',
+        subscriptionDate: '',
+        paymentDueDate: '',
+        quotationFile: null,
+        paymentHistory: []
+      });
+      setPaymentDueMonthDay({ month: '', day: '' });
+      
+      // Fetch the updated list of clients
+      fetchClients();
     } catch (error) {
       console.error('Error adding client:', error);
       toast.error(error.message || 'Failed to add client');
@@ -165,35 +391,87 @@ export default function ManagementDashboard() {
   };
 
   const handleUpdate = async (updatedClient) => {
-    const formData = new FormData();
-    const formattedClient = {
-      ...updatedClient,
-      subscriptionDate: new Date(updatedClient.subscriptionDate).toISOString(),
-      paymentDueDate: new Date(updatedClient.paymentDueDate).toISOString()
-    };
-
-    Object.keys(formattedClient).forEach(key => {
-      if (formattedClient[key] !== null && key !== 'paymentHistory') {
-        formData.append(key, formattedClient[key]);
-      }
-    });
-
+    console.log('handleUpdate called with:', updatedClient);
+    
+    // Validate the updatedClient data
+    if (!updatedClient.contactName || !updatedClient.phoneNumber || 
+        !updatedClient.location || 
+        !updatedClient.subscriptionDate || !updatedClient.paymentDueDate) {
+      
+      toast.error('Invalid client data. Please check all fields.');
+      console.error('Invalid client data:', updatedClient);
+      return;
+    }
+    
+    // Use mock data if the flag is set
+    if (USE_MOCK_DATA) {
+      console.log('Using mock data instead of updating via API');
+      
+      // Simulate updating a client in the mock data
+      setClients(prevClients => {
+        const updatedClients = prevClients.map(client => 
+          (client.id === updatedClient.id || client._id === updatedClient._id) 
+            ? updatedClient 
+            : client
+        );
+        console.log('Updated client list:', updatedClients);
+        return updatedClients;
+      });
+      
+      toast.success('Client updated successfully (mock)');
+      setEditingClient(null);
+      
+      // Force an update of the overdue clients list
+      setTimeout(() => {
+        updateOverdueClients();
+        checkPaymentDues();
+      }, 100);
+      
+      return;
+    }
+    
     try {
-      const response = await fetch(`${API_BASE_URL}/api/clients/${updatedClient.id || updatedClient._id}`, {
+      console.log('Updating client via API:', updatedClient);
+      const endpoint = getApiUrl('api/clients/' + (updatedClient.id || updatedClient._id));
+      console.log('API endpoint:', endpoint);
+      
+      const response = await fetch(endpoint, {
         method: 'PUT',
         headers: {
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: formData
+        body: JSON.stringify(updatedClient)
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update client');
+        // Log more details about the error
+        const statusText = response.statusText;
+        console.error('Response status:', response.status, statusText);
+        
+        try {
+          const errorText = await response.text();
+          console.log('Raw error response:', errorText);
+          
+          let errorData;
+          try {
+            errorData = JSON.parse(errorText);
+          } catch {
+            errorData = { error: `Server error (${response.status}): ${statusText || 'Unknown error'}` };
+          }
+          throw new Error(errorData.error || 'Failed to update client');
+        } catch (e) {
+          throw new Error(`Error parsing response: ${e.message}`);
+        }
       }
 
+      const result = await response.json();
+      console.log('API response:', result);
+      
       toast.success('Client updated successfully');
       setEditingClient(null);
+      
+      // Fetch the updated list of clients
       fetchClients();
     } catch (error) {
       console.error('Error updating client:', error);
@@ -202,33 +480,126 @@ export default function ManagementDashboard() {
   };
 
   const showNotification = (title, body) => {
+    console.log('Attempting to show notification:', { title, body });
+    
+    if (!("Notification" in window)) {
+      console.log("This browser does not support notifications");
+      return;
+    }
+    
     if (notificationPermission) {
-      new Notification(title, {
-        body,
-        icon: '/path/to/your/icon.png', // Add your icon path here
-      });
+      try {
+        console.log('Permission granted, creating notification');
+        new Notification(title, {
+          body,
+          icon: "/favicon.ico", // Use your website favicon
+        });
+        console.log('Notification created successfully');
+      } catch (error) {
+        console.error("Error showing notification:", error);
+      }
+    } else {
+      console.log('Notification permission not granted, showing toast only');
     }
   };
 
   const checkPaymentDues = () => {
+    console.log('Running checkPaymentDues with clients:', clients);
+    
+    if (clients.length === 0) {
+      console.log('No clients to check for payment dues');
+      return;
+    }
+    
     clients.forEach(client => {
+      console.log('Checking payment due for client:', client.contactName);
+      
+      if (!client.paymentDueDate) {
+        console.log('Client has no payment due date:', client.contactName);
+        return;
+      }
+      
       const dueDate = new Date(client.paymentDueDate);
+      console.log('Original payment due date:', dueDate);
+      
+      if (isNaN(dueDate.getTime())) {
+        console.error('Invalid payment due date for client:', client.contactName, client.paymentDueDate);
+        return;
+      }
+      
       const today = new Date();
-      const timeDiff = dueDate.getTime() - today.getTime();
+      console.log('Today:', today);
+      
+      // Get the current month's occurrence of the payment due date
+      const currentMonthDueDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        dueDate.getDate()
+      );
+      
+      console.log('Current month due date (before adjustment):', currentMonthDueDate);
+      
+      // If the date is invalid (e.g., trying to set Feb 30), it rolls over to next month
+      // Adjust back to the last day of the current month
+      if (currentMonthDueDate.getMonth() !== today.getMonth()) {
+        console.log('Date rolled over to next month, adjusting to last day of current month');
+        currentMonthDueDate.setDate(0); // Set to last day of previous month
+      }
+      
+      console.log('Current month due date (after adjustment):', currentMonthDueDate);
+      
+      // Get the next month's occurrence of the payment due date
+      const nextMonthDueDate = new Date(
+        today.getFullYear(),
+        today.getMonth() + 1,
+        dueDate.getDate()
+      );
+      
+      console.log('Next month due date (before adjustment):', nextMonthDueDate);
+      
+      // If the date is invalid, adjust to last day of the month
+      if (nextMonthDueDate.getMonth() !== (today.getMonth() + 1) % 12) {
+        console.log('Next month date invalid, adjusting to last day of month');
+        nextMonthDueDate.setDate(0); // Set to last day of previous month
+      }
+      
+      console.log('Next month due date (after adjustment):', nextMonthDueDate);
+      
+      // Determine which due date to use (current month or next month)
+      let nextDueDate;
+      if (currentMonthDueDate < today) {
+        // Current month's due date has passed, use next month
+        nextDueDate = nextMonthDueDate;
+        console.log('Current month due date has passed, using next month:', nextDueDate);
+      } else {
+        // Current month's due date is still in the future
+        nextDueDate = currentMonthDueDate;
+        console.log('Current month due date is in the future, using it:', nextDueDate);
+      }
+      
+      const timeDiff = nextDueDate.getTime() - today.getTime();
       const daysUntilDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      console.log('Days until due:', daysUntilDue);
 
       if (daysUntilDue <= 7 && daysUntilDue > 0) {
+        console.log('Payment due soon, showing notification');
         toast.warning(`Payment due in ${daysUntilDue} days for ${client.contactName}`);
         showNotification(
           'Payment Due Soon',
-          `Payment for ${client.contactName} is due in ${daysUntilDue} days`
+          `Payment for ${client.contactName} is due in ${daysUntilDue} days (on ${nextDueDate.toLocaleDateString()})`
         );
       } else if (daysUntilDue <= 0) {
-        toast.error(`Payment overdue for ${client.contactName}`);
+        // Calculate actual days overdue based on the current month's due date
+        const daysOverdue = Math.ceil((today.getTime() - currentMonthDueDate.getTime()) / (1000 * 3600 * 24));
+        console.log('Payment overdue, showing notification. Days overdue:', daysOverdue);
+        
+        toast.error(`Payment overdue for ${client.contactName} by ${daysOverdue} days`);
         showNotification(
           'Payment Overdue',
-          `Payment for ${client.contactName} is overdue by ${Math.abs(daysUntilDue)} days`
+          `Payment for ${client.contactName} is overdue by ${daysOverdue} days (was due ${currentMonthDueDate.toLocaleDateString()})`
         );
+      } else {
+        console.log('Payment not due soon and not overdue');
       }
     });
   };
@@ -254,11 +625,50 @@ export default function ManagementDashboard() {
     const today = new Date();
     const overdue = clients.filter(client => {
       const dueDate = new Date(client.paymentDueDate);
-      return dueDate < today;
+      // Get current month's due date
+      const currentMonthDueDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        dueDate.getDate()
+      );
+      
+      // Handle invalid dates (like Feb 30) by adjusting to the last day of the month
+      if (currentMonthDueDate.getMonth() !== today.getMonth()) {
+        currentMonthDueDate.setDate(0); // Set to last day of previous month
+      }
+      
+      return currentMonthDueDate < today;
     }).sort((a, b) => {
-      // Sort by most overdue first
-      return new Date(a.paymentDueDate) - new Date(b.paymentDueDate);
+      // Sort by most days overdue - this gives a better sorting for the overdue list
+      const dueA = new Date(a.paymentDueDate);
+      const dueB = new Date(b.paymentDueDate);
+      
+      // Calculate days overdue for A
+      const dueDateA = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        dueA.getDate()
+      );
+      if (dueDateA.getMonth() !== today.getMonth()) {
+        dueDateA.setDate(0);
+      }
+      const daysOverdueA = Math.ceil((today - dueDateA) / (1000 * 60 * 60 * 24));
+      
+      // Calculate days overdue for B
+      const dueDateB = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        dueB.getDate()
+      );
+      if (dueDateB.getMonth() !== today.getMonth()) {
+        dueDateB.setDate(0);
+      }
+      const daysOverdueB = Math.ceil((today - dueDateB) / (1000 * 60 * 60 * 24));
+      
+      // Sort by most overdue (higher days overdue) first
+      return daysOverdueB - daysOverdueA;
     });
+    
     setOverdueClients(overdue);
   };
 
@@ -267,8 +677,65 @@ export default function ManagementDashboard() {
     updateOverdueClients();
   }, [clients]);
 
+  const resetMockDatesForTesting = () => {
+    if (!clients.length) {
+      toast.error('No clients to update');
+      return;
+    }
+    
+    // Create test dates
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    
+    const threeDaysFromNow = new Date(today);
+    threeDaysFromNow.setDate(today.getDate() + 3);
+    
+    // Update client dates for testing notifications
+    const updatedClients = clients.map((client, index) => {
+      if (index % 2 === 0) {
+        // Even clients - set to yesterday (overdue)
+        return {
+          ...client,
+          paymentDueDate: yesterday.toISOString()
+        };
+      } else {
+        // Odd clients - set to 3 days from now (due soon)
+        return {
+          ...client,
+          paymentDueDate: threeDaysFromNow.toISOString()
+        };
+      }
+    });
+    
+    setClients(updatedClients);
+    localStorage.setItem('mockClients', JSON.stringify(updatedClients));
+    toast.success('Updated client dates for testing');
+    
+    // Run payment dues check
+    setTimeout(() => {
+      checkPaymentDues();
+    }, 500);
+  };
+
   return (
     <div className="management-dashboard">
+      <nav className="dashboard-nav">
+        <h1>NextGem Dashboard</h1>
+        <div>
+          <button className="debug-btn" onClick={checkPaymentDues}>
+            Check Payment Dues
+          </button>
+          {USE_MOCK_DATA && (
+            <button className="debug-btn" onClick={resetMockDatesForTesting}>
+              Reset Mock Dates
+            </button>
+          )}
+          <button className="logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+      </nav>
       <div className="dashboard-content">
         <div className="main-content">
           <h1>Client Management</h1>
@@ -283,13 +750,6 @@ export default function ManagementDashboard() {
             }}
           >
             {showAddForm ? 'Cancel' : 'Add New Client'}
-          </button>
-
-          <button 
-            className="logout-btn"
-            onClick={handleLogout}
-          >
-            Logout
           </button>
 
           {showAddForm && (
@@ -329,7 +789,6 @@ export default function ManagementDashboard() {
                 <label>Email:</label>
                 <input
                   type="email"
-                  required
                   value={newClient.email}
                   onChange={(e) => setNewClient({...newClient, email: e.target.value})}
                 />
@@ -346,13 +805,58 @@ export default function ManagementDashboard() {
               </div>
 
               <div className="form-group" key="paymentDueDate">
-                <label>Payment Due Date:</label>
-                <input
-                  type="date"
-                  required
-                  value={newClient.paymentDueDate}
-                  onChange={(e) => setNewClient({...newClient, paymentDueDate: e.target.value})}
-                />
+                <label>Payment Due Date (Monthly Recurring):</label>
+                <div className="date-inputs">
+                  <div className="date-input-group">
+                    <label>Month:</label>
+                    <select
+                      required
+                      value={paymentDueMonthDay.month}
+                      onChange={(e) => setPaymentDueMonthDay({
+                        ...paymentDueMonthDay,
+                        month: e.target.value
+                      })}
+                    >
+                      <option value="">Select Month</option>
+                      <option value="01">January</option>
+                      <option value="02">February</option>
+                      <option value="03">March</option>
+                      <option value="04">April</option>
+                      <option value="05">May</option>
+                      <option value="06">June</option>
+                      <option value="07">July</option>
+                      <option value="08">August</option>
+                      <option value="09">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">December</option>
+                    </select>
+                  </div>
+                  <div className="date-input-group">
+                    <label>Day:</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="31"
+                      required
+                      value={paymentDueMonthDay.day}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const day = value === '' ? '' : 
+                          Math.max(1, Math.min(31, parseInt(value))).toString().padStart(2, '0');
+                        setPaymentDueMonthDay({
+                          ...paymentDueMonthDay,
+                          day
+                        });
+                        
+                        // Provide visual feedback
+                        if (parseInt(day) > 28 && paymentDueMonthDay.month === '02') {
+                          toast.warning('February may not have this many days in some years');
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="form-group" key="quotationFile">
@@ -425,14 +929,45 @@ export default function ManagementDashboard() {
           {overdueClients.length > 0 ? (
             <div className="overdue-list">
               {overdueClients.map(client => {
-                const daysOverdue = Math.ceil(
-                  (new Date() - new Date(client.paymentDueDate)) / (1000 * 60 * 60 * 24)
+                const dueDate = new Date(client.paymentDueDate);
+                const today = new Date();
+                
+                // Get current month's due date
+                const currentMonthDueDate = new Date(
+                  today.getFullYear(),
+                  today.getMonth(),
+                  dueDate.getDate()
                 );
+                
+                // Handle invalid dates by adjusting to the last day of the month
+                if (currentMonthDueDate.getMonth() !== today.getMonth()) {
+                  currentMonthDueDate.setDate(0);
+                }
+                
+                const daysOverdue = Math.ceil(
+                  (today - currentMonthDueDate) / (1000 * 60 * 60 * 24)
+                );
+                
+                // Calculate next due date
+                const nextMonthDueDate = new Date(
+                  today.getFullYear(),
+                  today.getMonth() + 1,
+                  dueDate.getDate()
+                );
+                
+                // Handle invalid dates by adjusting to the last day of the month
+                if (nextMonthDueDate.getMonth() !== (today.getMonth() + 1) % 12) {
+                  nextMonthDueDate.setDate(0);
+                }
+                
                 return (
-                  <div key={client.id} className="overdue-item">
+                  <div key={client.id || client._id} className="overdue-item">
                     <h3>{client.contactName}</h3>
                     <p className="overdue-days">
                       {daysOverdue} days overdue
+                    </p>
+                    <p className="next-payment">
+                      Next payment: {nextMonthDueDate.toLocaleDateString()}
                     </p>
                     <p className="overdue-contact">
                       <span>📞 {client.phoneNumber}</span>
