@@ -31,6 +31,7 @@
     --z-normal: 1;
     --z-tooltip: 10;
     --z-fixed: 100;
+    --z-expanding-box: 101;
 }
 
 @media screen and (min-width: 768px) {
@@ -175,11 +176,44 @@ img {
 .home {
     height: calc(100vh - 3rem);
     row-gap: 1rem;
-    /* For desktop, current styles remain */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    position: relative;
+}
+
+.home-animation {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+.home-animation canvas {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.home-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 2;
 }
 
 .home-data {
     align-self: center;
+    margin-left: 40%;
+    z-index: 2;
 }
 
 .home-title {
@@ -188,7 +222,6 @@ img {
     color: #ffffff;
     font-family: the-future;
     font-stretch: extra-expanded;
-    margin-left: 40%;
 }
 
 .home-title-color {
@@ -201,10 +234,11 @@ img {
     justify-content: center;
     align-items: center;
     gap: 20px;
-    margin-top: 1rem;
-    margin-left: 30px;
+    bottom: 0;
+    margin-bottom: 2%;
+    margin-left: 40% !important;
+    z-index: 2;
 }
-
 
 .home-social-icon {
     width: max-content;
@@ -221,6 +255,7 @@ img {
     position: absolute;
     margin-bottom: 7%;
     margin-right: 16%;
+    z-index: 1;
 }
 .home-img img {
     width: 195px;
@@ -241,7 +276,7 @@ img {
     box-shadow: 0 0 0 #fec1958c;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
-    margin-left: 23%;
+    margin-left: 0%;
 }
 .star-1,
 .star-2,
@@ -330,16 +365,193 @@ img {
 .about-container {
     row-gap: 2rem;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* min-height: 100vh; */
+    padding: 2rem 0;
 }
+
 .about-subtitle {
-    margin-bottom: var(--mb2);
+    /* margin-bottom: 20rem; */
+    position: relative;
+    max-width: 800px;
 }
+
 .about-img {
     justify-self: center;
+    margin-bottom: 30rem;
 }
+
 .about-img img {
     width: 200px;
     border-radius: .5rem;
+}
+
+/* Add styles for geometric images */
+.geometric-images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin: 2rem auto;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 2rem;
+}
+
+.geometric-image {
+    width: 350px;
+    height: 350px;
+    border-radius: 1.5rem;
+    box-shadow: 0 0 30px rgba(243, 90, 47, 0.5);
+    transition: transform 0.3s ease;
+    object-fit: contain;
+    position: relative;
+    animation: coding 4s infinite;
+}
+
+@keyframes coding {
+    0% {
+        box-shadow: 0 0 30px rgba(243, 90, 47, 0.5);
+        transform: translateY(0);
+    }
+    25% {
+        box-shadow: 0 0 40px rgba(243, 90, 47, 0.8),
+                    0 0 60px rgba(243, 90, 47, 0.4);
+        transform: translateY(-5px);
+    }
+    50% {
+        box-shadow: 0 0 50px rgba(243, 90, 47, 0.6);
+        transform: translateY(0);
+    }
+    75% {
+        box-shadow: 0 0 40px rgba(243, 90, 47, 0.8),
+                    0 0 60px rgba(243, 90, 47, 0.4);
+        transform: translateY(-5px);
+    }
+    100% {
+        box-shadow: 0 0 30px rgba(243, 90, 47, 0.5);
+        transform: translateY(0);
+    }
+}
+
+.geometric-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 1.5rem;
+    background: linear-gradient(90deg, transparent, rgba(243, 90, 47, 0.2), transparent);
+    animation: scanning 2s linear infinite;
+}
+
+.geometric-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 1.5rem;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(243, 90, 47, 0.1) 2px,
+        rgba(243, 90, 47, 0.1) 4px
+    );
+    animation: glitch 0.5s infinite;
+    opacity: 0.5;
+}
+
+@keyframes scanning {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes glitch {
+    0% {
+        opacity: 0.5;
+        transform: translateX(0);
+    }
+    20% {
+        opacity: 0.75;
+        transform: translateX(-2px);
+    }
+    40% {
+        opacity: 0.5;
+        transform: translateX(2px);
+    }
+    60% {
+        opacity: 0.75;
+        transform: translateX(-2px);
+    }
+    80% {
+        opacity: 0.5;
+        transform: translateX(2px);
+    }
+    100% {
+        opacity: 0.5;
+        transform: translateX(0);
+    }
+}
+
+.geometric-image:hover {
+    transform: translateY(-10px);
+    animation: none;
+}
+
+.geometric-image:hover::before,
+.geometric-image:hover::after {
+    animation: none;
+    opacity: 0;
+}
+
+@media screen and (max-width: 1200px) {
+    .geometric-images {
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+    
+    .geometric-image {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .geometric-images {
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+    
+    .geometric-image {
+        width: 250px;
+        height: 250px;
+    }
+
+    .about-container {
+        /* min-height: auto; */
+        padding: 4rem 0;
+    }
+
+    .home-animation {
+        width: 100%;
+        height: 50vh;
+        top: 25vh;
+        transform: none;
+        position: absolute;
+        right: 0;
+    }
 }
 
 /* SKILLS */
@@ -640,6 +852,86 @@ body, button, input {
     color: #ffffff;
 }
 
+/* Glitch Animation Styles */
+.glitch {
+  position: relative;
+  color: var(--first-color);
+}
+
+.glitch::before,
+.glitch::after {
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-direction: alternate-reverse;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  clip: rect(0, 900px, 0, 0);
+  content: attr(data-text);
+}
+
+.glitch::after {
+  animation-name: glitch-animation;
+  animation-duration: 4s;
+  left: 4px;
+  text-shadow: -1px 0 #ffa800;
+}
+
+.glitch::before {
+  animation-name: glitch-animation-2;
+  animation-duration: 6s;
+  left: -4px;
+  text-shadow: 1px 0 #00d8ff;
+}
+
+@keyframes glitch-animation {
+  0% { clip: rect(42px, 9999px, 44px, 0); }
+  5% { clip: rect(12px, 9999px, 59px, 0); }
+  10% { clip: rect(48px, 9999px, 29px, 0); }
+  15% { clip: rect(42px, 9999px, 73px, 0); }
+  20% { clip: rect(63px, 9999px, 27px, 0); }
+  25% { clip: rect(34px, 9999px, 55px, 0); }
+  30% { clip: rect(86px, 9999px, 73px, 0); }
+  35% { clip: rect(20px, 9999px, 20px, 0); }
+  40% { clip: rect(26px, 9999px, 60px, 0); }
+  45% { clip: rect(25px, 9999px, 66px, 0); }
+  50% { clip: rect(57px, 9999px, 98px, 0); }
+  55% { clip: rect(5px, 9999px, 46px, 0); }
+  60% { clip: rect(82px, 9999px, 31px, 0); }
+  65% { clip: rect(54px, 9999px, 27px, 0); }
+  70% { clip: rect(28px, 9999px, 99px, 0); }
+  75% { clip: rect(45px, 9999px, 69px, 0); }
+  80% { clip: rect(23px, 9999px, 85px, 0); }
+  85% { clip: rect(54px, 9999px, 84px, 0); }
+  90% { clip: rect(45px, 9999px, 47px, 0); }
+  95% { clip: rect(37px, 9999px, 20px, 0); }
+  100% { clip: rect(4px, 9999px, 91px, 0); }
+}
+
+@keyframes glitch-animation-2 {
+  0% { clip: rect(65px, 9999px, 100px, 0); }
+  5% { clip: rect(52px, 9999px, 74px, 0); }
+  10% { clip: rect(79px, 9999px, 85px, 0); }
+  15% { clip: rect(75px, 9999px, 5px, 0); }
+  20% { clip: rect(67px, 9999px, 61px, 0); }
+  25% { clip: rect(14px, 9999px, 79px, 0); }
+  30% { clip: rect(1px, 9999px, 66px, 0); }
+  35% { clip: rect(86px, 9999px, 30px, 0); }
+  40% { clip: rect(23px, 9999px, 98px, 0); }
+  45% { clip: rect(85px, 9999px, 72px, 0); }
+  50% { clip: rect(71px, 9999px, 75px, 0); }
+  55% { clip: rect(2px, 9999px, 48px, 0); }
+  60% { clip: rect(30px, 9999px, 16px, 0); }
+  65% { clip: rect(59px, 9999px, 50px, 0); }
+  70% { clip: rect(41px, 9999px, 62px, 0); }
+  75% { clip: rect(2px, 9999px, 82px, 0); }
+  80% { clip: rect(47px, 9999px, 73px, 0); }
+  85% { clip: rect(3px, 9999px, 27px, 0); }
+  90% { clip: rect(26px, 9999px, 55px, 0); }
+  95% { clip: rect(42px, 9999px, 97px, 0); }
+  100% { clip: rect(38px, 9999px, 49px, 0); }
+}
+
 /* MEDIA QUERIES for larger screens */
 @media screen and (min-width: 769px) {
     body {
@@ -684,8 +976,10 @@ body, button, input {
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: 20px;
-        margin-top: 1rem;
+        gap: 1px;
+        margin-top: 25rem;
+        margin-left: 17.5rem; 
+        position: absolute;
     }
     
     .home-social-icon {
@@ -886,3 +1180,102 @@ body, button, input {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Radio Button Navigation Styles */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@1,500&display=swap");
+
+.nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.radio-btn-group {
+  margin: 10px;
+}
+
+input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+}
+
+input[type="radio"]:checked + label {
+  &::before {
+    box-shadow: 0 0 25px 2px #ff6a00;
+  }
+
+  span {
+    color: #c40a35;
+  }
+}
+
+input[type="radio"]:focus + label {
+  &::before {
+    box-shadow: 0 0 25px 2px #ff8400;
+  }
+}
+
+label {
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-weight: 500;
+  font-style: italic;
+  align-items: center;
+  justify-content: center;
+  font-family: "IBM Plex Mono", monospace;
+  height: 50px;
+  padding: 0 30px;
+  position: relative;
+  text-decoration: none;
+
+  &::before {
+    background-color: #24252c;
+    background-image: repeating-linear-gradient(
+      0deg,
+      #000000,
+      #000000 1px,
+      #000000 1px,
+      #000000 2px
+    );
+    border-radius: 10px;
+    content: "";
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    transform: skew(-15deg);
+    transition: box-shadow 700ms;
+    width: 100%;
+    z-index: -1;
+  }
+
+  span {
+    transition: color 350ms;
+    z-index: 1;
+  }
+
+  svg {
+    border-radius: 10px;
+    overflow: hidden;
+    position: absolute;
+    transform: skew(-15deg);
+
+    .blue rect {
+      fill: #ffffff;
+      shape-rendering: crispEdges;
+      mix-blend-mode: color-dodge;
+    }
+
+    .pink rect {
+      fill: #F35A2F;
+      shape-rendering: crispEdges;
+    }
+  }
+}
+

@@ -26,7 +26,7 @@
     position: relative;
     font-size: clamp(1rem, 7vw, 3rem);
     font-weight: 900;
-    color: rgba(12, 22, 28, 1);
+    color: rgb(0, 0, 0);
     text-align: center;
     width: 100%;
     margin-bottom: 1rem;
@@ -36,23 +36,151 @@
     width: 100%;
     display: grid;
     grid-template-rows: repeat(8, auto);
-    gap: 1rem;
-    padding-left: 1%;
-    padding-right: 1%;
+    gap: 1.5rem;
+    padding: 2rem;
   }
   
   .box {
     position: relative;
-    background-color: rgb(19, 41, 53);
+    background-color: rgb(0, 0, 0);
     color: white;
     width: 100%;
     height: 5rem;
-    border-radius: 0.6rem;
+    border-radius: 1rem;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: 0.25s, transform 0.15s;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    transform-origin: top center;
+    box-shadow: 0 0 15px rgba(243, 90, 47, 0.5);
+  }
+  
+  .box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 1rem;
+    background: linear-gradient(90deg, transparent, rgba(243, 90, 47, 0.2), transparent);
+    animation: scanning 2s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .box::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 1rem;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(243, 90, 47, 0.1) 2px,
+        rgba(243, 90, 47, 0.1) 4px
+    );
+    animation: glitch 0.5s infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .box:hover::before,
+  .box:hover::after {
+    opacity: 1;
+  }
+  
+  .box.expanding {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height, 4rem);
+    z-index: var(--z-expanding-box);
+    border-radius: 0;
+    animation: expandToHeader 0.5s ease-in-out forwards;
+    transform-origin: top center;
+    background-color: rgb(0, 0, 0) !important;
+    pointer-events: none;
+  }
+  
+  .box.expanding::before,
+  .box.expanding::after {
+    opacity: 0;
+  }
+  
+  @keyframes expandToHeader {
+    0% {
+        transform: translateY(var(--original-y, 0)) scaleX(var(--original-scale, 1));
+        height: 5rem;
+        border-radius: 1rem;
+        opacity: 1;
+    }
+    40% {
+        transform: translateY(0) scaleX(var(--original-scale, 1));
+        height: var(--header-height, 4rem);
+        border-radius: 0;
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0) scaleX(1);
+        height: var(--header-height, 4rem);
+        border-radius: 0;
+        opacity: 1;
+    }
+  }
+  
+  .box.expanding h3 {
+    animation: fadeText 0.3s ease-out forwards;
+  }
+  
+  @keyframes fadeText {
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+  }
+  
+  @keyframes scanning {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+  }
+  
+  @keyframes glitch {
+    0% {
+        opacity: 0.5;
+        transform: translateX(0);
+    }
+    20% {
+        opacity: 0.75;
+        transform: translateX(-2px);
+    }
+    40% {
+        opacity: 0.5;
+        transform: translateX(2px);
+    }
+    60% {
+        opacity: 0.75;
+        transform: translateX(-2px);
+    }
+    80% {
+        opacity: 0.5;
+        transform: translateX(2px);
+    }
+    100% {
+        opacity: 0.5;
+        transform: translateX(0);
+    }
   }
   
   .box h3 {
@@ -61,6 +189,13 @@
     text-align: center;
     transition: 0.25s;
     width: 80%;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .box:hover {
+    box-shadow: 0 0 30px rgba(243, 90, 47, 0.5);
+    transform: translateY(-5px);
   }
   
   .box:hover h3 {
@@ -74,13 +209,81 @@
   /* Medium Screens */
   @media (min-width: 1024px) {
     .container {
-      display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(4, auto);
     }
   
     .box {
       height: 7.5rem;
+    }
+  }
+  
+  /* Add a new class for the expanded state */
+  .box.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5rem;
+    z-index: var(--z-expanding-box);
+    border-radius: 0;
+    background-color: rgb(0, 0, 0) !important;
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0) scaleX(1);
+    box-shadow: 0 0 30px rgba(243, 90, 47, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
+  }
+  
+  .box.expanded h3 {
+    margin: 0;
+    opacity: 1;
+    transform: none;
+    position: relative;
+    left: 0;
+    width: auto;
+  }
+  
+  .exit-icon {
+    position: absolute;
+    right: 2rem;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(243, 90, 47, 0.2);
+    z-index: 2;
+  }
+  
+  .exit-icon:hover {
+    background: rgba(243, 90, 47, 0.4);
+    transform: rotate(90deg);
+  }
+  
+  .box.collapsing {
+    animation: collapseToOriginal 0.5s ease-in-out forwards;
+  }
+  
+  @keyframes collapseToOriginal {
+    0% {
+        transform: translateY(0) scaleX(1);
+        height: 5rem;
+        border-radius: 0;
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(var(--original-y, 0)) scaleX(var(--original-scale, 1));
+        height: 5rem;
+        border-radius: 1rem;
+        opacity: 1;
     }
   }
   
