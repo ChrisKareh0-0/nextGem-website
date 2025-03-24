@@ -545,12 +545,7 @@ img {
     }
 
     .home-animation {
-        width: 100%;
-        height: 50vh;
-        top: 25vh;
-        transform: none;
-        position: absolute;
-        right: 0;
+        display: none;
     }
 }
 
@@ -1065,7 +1060,7 @@ body, button, input {
         align-items: center;
         gap: 20px;
         margin-top: 1rem;
-        margin-right: 30px;
+        margin-right: 650px;
     }
     
     .home-img {
@@ -1130,6 +1125,11 @@ body, button, input {
         font-size: 10px;  /* Slightly larger contact info */
         text-align: center;
         margin-top: 20px;
+    }
+
+    /* Hide cube animation on mobile */
+    .home-animation {
+        display: none;
     }
 }
 
