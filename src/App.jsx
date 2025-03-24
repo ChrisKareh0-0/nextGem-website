@@ -147,19 +147,11 @@ function App() {
   return (
     <Router>
       <>
-        <div className="spline-container">
-          <Spline 
-            scene="https://prod.spline.design/Dc1yF0TKl-zWQE6X/scene.splinecode"
-            style={{ 
-              width: '100%', 
-              height: '100%',
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              zIndex: -1
-            }}
-          />
-        </div>
+      <Spline 
+          scene="https://prod.spline.design/Dc1yF0TKl-zWQE6X/scene.splinecode"
+          style={{ width: '100%', height: '100vh', position: 'fixed', top: 0, left: 0, zIndex: -1 }}
+        />
+
         <div className="floating-rectangle"></div>
         
         {/* HEADER */}
