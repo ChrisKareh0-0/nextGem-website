@@ -1048,10 +1048,15 @@ body, button, input {
         justify-content: center;
         padding: 2rem 1rem;
         height: auto;
+        position: relative;
     }
     .home-data {
         margin-left: 0;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
     }
     .home-title {
         margin-left: 0;
@@ -1064,9 +1069,9 @@ body, button, input {
         justify-content: center;
         align-items: center;
         gap: 20px;
-        position: absolute;
-        top: 90%;
-        right: 32%
+        position: relative;
+        margin-top: 250px;
+        margin-right: 700px;
     }
     
     .home-img {
@@ -1083,14 +1088,13 @@ body, button, input {
     }
     /* Center the Contact Button */
     .contactButton {
-        position: relative; /* Remove absolute positioning */
-        margin: 20px auto;  /* Center horizontally */
-        left: 0;            /* Reset any left offset */
+        position: relative;
+        margin: 20px auto;
+        left: 0;
     }
     .section-title {
         margin-top: 170px !important;
     }
-    
 }
 
 @media screen and (max-width: 768px) {
