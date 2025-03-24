@@ -1059,8 +1059,12 @@ body, button, input {
         justify-content: center;
         align-items: center;
         gap: 20px;
-        margin-top: 1rem;
-        margin-right: 650px;
+        /* margin-top: 1rem; */
+        /* margin-right: 200% !important; */
+        bottom: 0;
+        right: 33%;
+        top: 100%;
+        position: absolute;
     }
     
     .home-img {
