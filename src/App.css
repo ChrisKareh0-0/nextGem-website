@@ -1156,12 +1156,12 @@ body, button, input {
 
 .floating-rectangle {
   position: fixed;
-  bottom: 20px;
+  bottom: 10px;
   right: 20px;
   width: 150px;
   height: 60px;
   background-color: #121212;
-  z-index: 0;
+  z-index: -1;
   animation: moveUpDown 3s ease-in-out infinite;
   border-radius: 4px;
 }
