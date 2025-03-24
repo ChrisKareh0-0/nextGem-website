@@ -1070,7 +1070,7 @@ body, button, input {
         align-items: center;
         gap: 20px;
         position: relative;
-        margin-top: 250px;
+        margin-top: 280px;
         margin-right: 700px;
     }
     
@@ -1089,7 +1089,7 @@ body, button, input {
     /* Center the Contact Button */
     .contactButton {
         position: relative;
-        margin: 20px auto;
+        /* margin: 20px auto; */
         left: 0;
     }
     .section-title {
