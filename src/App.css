@@ -547,7 +547,8 @@ img {
     .home-animation {
         width: 100%;
         height: 50vh;
-        top: 25vh;
+        top: 18vh;
+        left: 0vh;
         transform: none;
         position: absolute;
         right: 0;
@@ -1284,6 +1285,35 @@ label {
       fill: #F35A2F;
       shape-rendering: crispEdges;
     }
+  }
+}
+
+/* Add these at the end of your file */
+@media screen and (max-width: 768px) {
+  /* Spline container adjustments for mobile */
+  iframe {
+    width: 100% !important;
+    height: 100vh !important;
+    overflow: hidden;
+  }
+
+  /* Ensure the container doesn't create unwanted scrollbars */
+  body {
+    overflow-x: hidden;
+    width: 100vw;
+  }
+
+  /* Adjust main content to account for fixed background */
+  .main-content {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* Fix for iOS Safari 100vh issue */
+@supports (-webkit-touch-callout: none) {
+  .spline-container {
+    height: -webkit-fill-available;
   }
 }
 
