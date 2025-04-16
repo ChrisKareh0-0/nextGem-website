@@ -185,7 +185,7 @@ img {
 .home-animation {
     position: absolute;
     right: 0;
-    top: 50%;
+    top: 78%;
     transform: translateY(-50%);
     width: 50%;
     height: 100%;
