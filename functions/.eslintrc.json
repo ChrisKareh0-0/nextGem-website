@@ -1,0 +1,26 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "node": true,
+    "commonjs": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "rules": {
+    "quotes": ["error", "double"],
+    "no-undef": "off",
+    "no-unused-vars": "off"
+  },
+  "globals": {
+    "process": "readonly",
+    "module": "readonly",
+    "require": "readonly",
+    "exports": "readonly"
+  }
+} 

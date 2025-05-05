@@ -19,4 +19,4 @@ const db = getFirestore(app);
 // Log initialization
 console.log('Firebase initialized with project:', import.meta.env.VITE_FIREBASE_PROJECT_ID);
 
-export { db };
+export { db, app };

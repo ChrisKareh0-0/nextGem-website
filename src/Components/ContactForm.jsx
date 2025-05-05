@@ -1,18 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { toast } from 'react-toastify';
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { toast } from "react-toastify";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { app } from "../firebase";
 
-// Helper to determine if we're in development mode
-const isDevelopment = import.meta.env.MODE === 'development';
-
-// Set the base URL for the API based on the environment
-const BACKEND_URL = isDevelopment 
-  ? 'http://localhost:5000' // Development: Use localhost
-  : 'https://nextgem-website-backend.onrender.com'; // Production: Use the deployed backend URL
-
-// Construct the full API URL for contacts
-const API_URL = `${BACKEND_URL}/api/contacts`;
-
-console.log('Contact Form API URL:', API_URL);
+// Initialize Firebase Functions
+const functions = getFunctions(app, "us-central1");
 
 const ResizableInput = ({ placeholder, value, onChange }) => {
   const [fontSize, setFontSize] = useState(window.innerWidth <= 768 ? 16 : 14);
@@ -37,8 +30,8 @@ const ResizableInput = ({ placeholder, value, onChange }) => {
       setFontSize(window.innerWidth <= 768 ? 16 : 14);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -46,10 +39,10 @@ const ResizableInput = ({ placeholder, value, onChange }) => {
       className="app-form-control"
       placeholder={placeholder}
       value={value}
-      style={{ 
-        fontSize: `${fontSize}px`, 
-        transition: 'font-size 0.2s ease',
-        padding: window.innerWidth <= 768 ? '15px 0' : '10px 0'
+      style={{
+        fontSize: `${fontSize}px`,
+        transition: "font-size 0.2s ease",
+        padding: window.innerWidth <= 768 ? "15px 0" : "10px 0",
       }}
       onInput={handleInput}
       onChange={handleInput}
@@ -57,59 +50,62 @@ const ResizableInput = ({ placeholder, value, onChange }) => {
   );
 };
 
+ResizableInput.propTypes = {
+  placeholder: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
+};
+
 export default function ContactForm() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { placeholder, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [placeholder.toLowerCase()]: value
+      [placeholder.toLowerCase()]: value,
     }));
   };
 
   const handleSubmit = async () => {
     if (!formData.name || !formData.email || !formData.message) {
-      toast.error('Please fill in all required fields');
+      toast.error("Please fill in all required fields");
       return;
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      toast.error('Please enter a valid email address');
+      toast.error("Please enter a valid email address");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(formData)
+      const sendContactEmail = httpsCallable(functions, "sendContactEmail");
+      const result = await sendContactEmail({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || "",
+        message: formData.message
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error || `HTTP error! status: ${response.status}`);
+      if (result.data.error) {
+        throw new Error(result.data.error);
       }
 
-      const data = await response.json();
-      toast.success(data.message || 'Message sent successfully!');
-      setFormData({ name: '', email: '', phone: '', message: '' });
+      toast.success("Message sent successfully!");
+      setFormData({ name: "", email: "", phone: "", message: "" });
     } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error(error.message || 'Failed to send message. Please try again.');
+      console.error("Error submitting form:", error);
+      toast.error(error.message || "Failed to send message. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -148,7 +144,7 @@ export default function ContactForm() {
       <div className="app-form-group buttons">
         <button
           className="app-form-button"
-          onClick={() => setFormData({ name: '', email: '', phone: '', message: '' })}
+          onClick={() => setFormData({ name: "", email: "", phone: "", message: "" })}
         >
           CANCEL
         </button>
@@ -157,7 +153,7 @@ export default function ContactForm() {
           onClick={handleSubmit}
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'SENDING...' : 'SEND'}
+          {isSubmitting ? "SENDING..." : "SEND"}
         </button>
       </div>
     </div>
