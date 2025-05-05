@@ -1,11 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { app } from "../firebase";
-
-// Initialize Firebase Functions
-const functions = getFunctions(app, "us-central1");
 
 const ResizableInput = ({ placeholder, value, onChange }) => {
   const [fontSize, setFontSize] = useState(window.innerWidth <= 768 ? 16 : 14);
@@ -23,16 +18,6 @@ const ResizableInput = ({ placeholder, value, onChange }) => {
 
     onChange(event);
   };
-
-  // Handle window resize
-  useEffect(() => {
-    const handleResize = () => {
-      setFontSize(window.innerWidth <= 768 ? 16 : 14);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <input
@@ -73,7 +58,9 @@ export default function ContactForm() {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
     if (!formData.name || !formData.email || !formData.message) {
       toast.error("Please fill in all required fields");
       return;
@@ -89,30 +76,45 @@ export default function ContactForm() {
     setIsSubmitting(true);
 
     try {
-      const sendContactEmail = httpsCallable(functions, "sendContactEmail");
-      const result = await sendContactEmail({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone || "",
-        message: formData.message
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "61c49d01-cfb9-4445-9687-d6fcf7afeecf", 
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || "Not provided",
+          message: formData.message,
+          subject: "New Contact Form Submission",
+          from_name: formData.name,
+          reply_to: formData.email,
+        }),
       });
 
-      if (result.data.error) {
-        throw new Error(result.data.error);
-      }
+      const result = await response.json();
 
-      toast.success("Message sent successfully!");
-      setFormData({ name: "", email: "", phone: "", message: "" });
+      if (result.success) {
+        toast.success("Message sent successfully!");
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        throw new Error(result.message || "Failed to send message");
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error(error.message || "Failed to send message. Please try again.");
+      toast.error("Failed to send message. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="app-form">
+    <form 
+      className="app-form"
+      onSubmit={handleSubmit}
+    >
       <div className="app-form-group">
         <ResizableInput
           placeholder="NAME"
@@ -143,19 +145,20 @@ export default function ContactForm() {
       </div>
       <div className="app-form-group buttons">
         <button
+          type="button"
           className="app-form-button"
           onClick={() => setFormData({ name: "", email: "", phone: "", message: "" })}
         >
           CANCEL
         </button>
         <button
+          type="submit"
           className="app-form-button"
-          onClick={handleSubmit}
           disabled={isSubmitting}
         >
           {isSubmitting ? "SENDING..." : "SEND"}
         </button>
       </div>
-    </div>
+    </form>
   );
 } 
