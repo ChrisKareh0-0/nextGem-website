@@ -1,0 +1,60 @@
+
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme inline {
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-sidebar-ring: var(----sidebar-ring);
+  --color-sidebar-border: var(----sidebar-border);
+  --color-ring: var(----ring);
+  --color-input: var(----input);
+  --color-border: var(----border);
+  --color-destructive: var(----destructive);
+  --color-primary: var(----primary);
+  --color-popover: var(----popover);
+  --color-card: var(----card);
+}
+
+:root {
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+}
+
+.dark {
+  --card: oklch(0.145 0 0);
+  --popover: oklch(0.145 0 0);
+  --primary: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+.image23{
+  width: 100px;
+  height: auto;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s infinite;
+}
