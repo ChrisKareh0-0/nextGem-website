@@ -5,7 +5,20 @@ export function App() {
   const imageRef = useRef<HTMLImageElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
   const [displayedText, setDisplayedText] = useState("");
+  const [fontSize, setFontSize] = useState("18px");
   const fullText = "Always standing by, whenever the moment calls.";
+
+  useEffect(() => {
+    // Set font size based on screen width
+    const updateFontSize = () => {
+      setFontSize(window.innerWidth < 768 ? "12px" : "18px");
+    };
+    
+    updateFontSize();
+    window.addEventListener('resize', updateFontSize);
+    
+    return () => window.removeEventListener('resize', updateFontSize);
+  }, []);
 
   useEffect(() => {
     // Add favicon dynamically
@@ -98,11 +111,12 @@ export function App() {
         />
         <p
           ref={textRef}
-          className="text-center font-mono font-bold text-lg"
+          className="text-center font-mono font-bold"
           style={{
             fontFamily: "'Courier New', monospace",
             whiteSpace: 'nowrap',
             color: 'white',
+            fontSize: 10,
           }}
         >
           {displayedText}
