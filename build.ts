@@ -135,6 +135,7 @@ const result = await Bun.build({
   minify: true,
   target: "browser",
   sourcemap: "linked",
+  publicPath: "/",
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),
   },
@@ -142,6 +143,12 @@ const result = await Bun.build({
 });
 
 const end = performance.now();
+
+// Copy public assets to dist
+if (existsSync("public")) {
+  console.log("📁 Copying public assets to dist...");
+  await cp("public", outdir, { recursive: true });
+}
 
 const outputTable = result.outputs.map(output => ({
   File: path.relative(process.cwd(), output.path),
