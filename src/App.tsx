@@ -8,6 +8,13 @@ export function App() {
   const fullText = "Always standing by, whenever the moment calls.";
 
   useEffect(() => {
+    // Add favicon dynamically
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.href = '/images/nextgem-logo.png';
+    link.type = 'image/png';
+    document.head.appendChild(link);
+
     const loadGSAP = async () => {
       const { gsap } = await import("gsap");
 
