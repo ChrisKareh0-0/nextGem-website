@@ -115,6 +115,12 @@ if (existsSync(outdir)) {
   await rm(outdir, { recursive: true, force: true });
 }
 
+// Copy public assets first
+if (existsSync("public")) {
+  console.log("📁 Copying public assets to dist...");
+  await cp("public", outdir, { recursive: true });
+}
+
 const start = performance.now();
 
 const entrypoints = [...new Bun.Glob("**.html").scanSync("src")]
@@ -136,12 +142,6 @@ const result = await Bun.build({
 });
 
 const end = performance.now();
-
-// Copy public assets to dist
-if (existsSync("public")) {
-  console.log("📁 Copying public assets to dist...");
-  await cp("public", outdir, { recursive: true });
-}
 
 const outputTable = result.outputs.map(output => ({
   File: path.relative(process.cwd(), output.path),
