@@ -2,14 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NextGem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Nextgem</title>
+    <link rel="icon" href="/images/nextgem-logo.png" type="image/png">
     <script type="module" src="./frontend.tsx" async></script>
     <style>
-      html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
-      #root { width: 100%; height: 100%; }
-      @media (max-width: 768px) {
-        html, body { overflow: hidden; }
+      html, body { 
+        width: 100%; 
+        height: 100%; 
+        margin: 0; 
+        padding: 0; 
+        overflow: hidden;
+        -webkit-overflow-scrolling: touch;
+        touch-action: none;
+      }
+      #root { 
+        width: 100%; 
+        height: 100%;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
     </style>
   </head>
