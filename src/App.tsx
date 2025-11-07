@@ -72,7 +72,7 @@ export function App() {
           // Make the logo much smaller and non-interactive.
           // pointer-events-none prevents any mouse/touch interactions. draggable=false
           // prevents dragging. role+aria-hidden make it non-interactive for accessibility.
-          className="pointer-events-none w-10 sm:w-12"
+          className="pointer-events-none w-48 sm:w-64 md:w-80 lg:w-96"
           draggable={false}
           role="presentation"
           aria-hidden="true"
@@ -87,7 +87,7 @@ export function App() {
           }}
           // Use absolute centering so it's precisely centered regardless of any layout quirks
           // Also set an explicit width so it will be consistently small regardless of Tailwind processing.
-          style={{ width: '320px', height: 'auto', marginBottom: '0px', color: 'white' }}
+          style={{ height: 'auto', marginBottom: '0px', color: 'white' }}
         />
         <p
           ref={textRef}
